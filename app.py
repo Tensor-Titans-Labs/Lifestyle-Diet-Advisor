@@ -218,6 +218,8 @@ if 'lifestyle_score' not in st.session_state:
     st.session_state.lifestyle_score = None
 if 'show_form' not in st.session_state:
     st.session_state.show_form = True
+if 'user_data' not in st.session_state:
+    st.session_state.user_data = {}
 
 # Header
 st.markdown('<h1 class="main-header">🌱 Lifestyle & Diet Advisor</h1>', unsafe_allow_html=True)
@@ -372,6 +374,21 @@ if st.session_state.show_form:
                 
                 st.session_state.recommendations = recommendations_text
                 st.session_state.lifestyle_score = score
+                st.session_state.user_data = {
+                    'age': age,
+                    'diet_type': diet_type,
+                    'meals_per_day': meals_per_day,
+                    'water_intake': water_intake,
+                    'sleep_hours': sleep_hours,
+                    'sleep_quality': sleep_quality,
+                    'exercise_frequency': exercise_frequency,
+                    'exercise_type': exercise_type,
+                    'stress_level': stress_level,
+                    'meditation': meditation,
+                    'smoking': smoking,
+                    'alcohol': alcohol,
+                    'health_goals': health_goals
+                }
                 st.session_state.show_form = False
                 st.rerun()
                 
@@ -431,12 +448,12 @@ else:
         col1, col2 = st.columns(2)
         with col1:
             st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.metric("Current Diet", diet_type)
-            st.metric("Meals/Day", meals_per_day)
+            st.metric("Current Diet", st.session_state.user_data.get('diet_type', 'N/A'))
+            st.metric("Meals/Day", st.session_state.user_data.get('meals_per_day', 'N/A'))
             st.markdown('</div>', unsafe_allow_html=True)
         with col2:
             st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.metric("Water Intake", f"{water_intake} glasses")
+            st.metric("Water Intake", f"{st.session_state.user_data.get('water_intake', 0)} glasses")
             st.metric("Recommended", "8-10 glasses")
             st.markdown('</div>', unsafe_allow_html=True)
         
@@ -448,11 +465,12 @@ else:
         col1, col2 = st.columns(2)
         with col1:
             st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.metric("Exercise Frequency", exercise_frequency)
+            st.metric("Exercise Frequency", st.session_state.user_data.get('exercise_frequency', 'N/A'))
             st.markdown('</div>', unsafe_allow_html=True)
         with col2:
             st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.metric("Activities", ", ".join(exercise_type) if exercise_type else "None")
+            exercise_types = st.session_state.user_data.get('exercise_type', [])
+            st.metric("Activities", ", ".join(exercise_types) if exercise_types else "None")
             st.markdown('</div>', unsafe_allow_html=True)
         
         st.success("🎯 Aim for 150 minutes of moderate activity per week")
@@ -463,24 +481,70 @@ else:
         col1, col2 = st.columns(2)
         with col1:
             st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.metric("Sleep Duration", f"{sleep_hours} hours")
-            st.metric("Sleep Quality", sleep_quality)
+            st.metric("Sleep Duration", f"{st.session_state.user_data.get('sleep_hours', 0)} hours")
+            st.metric("Sleep Quality", st.session_state.user_data.get('sleep_quality', 'N/A'))
             st.markdown('</div>', unsafe_allow_html=True)
         with col2:
             st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-            st.metric("Stress Level", stress_level)
-            st.metric("Meditation", meditation)
+            st.metric("Stress Level", st.session_state.user_data.get('stress_level', 'N/A'))
+            st.metric("Meditation", st.session_state.user_data.get('meditation', 'N/A'))
             st.markdown('</div>', unsafe_allow_html=True)
         
         st.warning("🌙 Aim for 7-9 hours of quality sleep each night")
     
-    # Button to start over
+    # Download Report Button
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("Start New Assessment"):
-        st.session_state.show_form = True
-        st.session_state.recommendations = None
-        st.session_state.lifestyle_score = None
-        st.rerun()
+    
+    # Create downloadable report
+    report_content = f"""
+LIFESTYLE & DIET ADVISOR - HEALTH REPORT
+{'='*50}
+
+Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+LIFESTYLE SCORE: {st.session_state.lifestyle_score}/100
+
+USER PROFILE:
+{'='*50}
+Age: {st.session_state.user_data.get('age', 'N/A')}
+Diet Type: {st.session_state.user_data.get('diet_type', 'N/A')}
+Meals per Day: {st.session_state.user_data.get('meals_per_day', 'N/A')}
+Water Intake: {st.session_state.user_data.get('water_intake', 'N/A')} glasses/day
+Sleep Hours: {st.session_state.user_data.get('sleep_hours', 'N/A')} hours/night
+Sleep Quality: {st.session_state.user_data.get('sleep_quality', 'N/A')}
+Exercise Frequency: {st.session_state.user_data.get('exercise_frequency', 'N/A')}
+Exercise Types: {', '.join(st.session_state.user_data.get('exercise_type', [])) if st.session_state.user_data.get('exercise_type') else 'None'}
+Stress Level: {st.session_state.user_data.get('stress_level', 'N/A')}
+Meditation: {st.session_state.user_data.get('meditation', 'N/A')}
+Smoking: {st.session_state.user_data.get('smoking', 'N/A')}
+Alcohol: {st.session_state.user_data.get('alcohol', 'N/A')}
+Health Goals: {st.session_state.user_data.get('health_goals', 'N/A')}
+
+PERSONALIZED RECOMMENDATIONS:
+{'='*50}
+{st.session_state.recommendations}
+
+{'='*50}
+Disclaimer: This report provides general wellness guidance. 
+Always consult healthcare professionals for medical advice.
+"""
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.download_button(
+            label="📥 Download Report (TXT)",
+            data=report_content,
+            file_name=f"health_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+            mime="text/plain",
+            use_container_width=True
+        )
+    with col2:
+        if st.button("🔄 Start New Assessment", use_container_width=True):
+            st.session_state.show_form = True
+            st.session_state.recommendations = None
+            st.session_state.lifestyle_score = None
+            st.session_state.user_data = {}
+            st.rerun()
 
 # Welcome screen
 if st.session_state.show_form and st.session_state.recommendations is None:
