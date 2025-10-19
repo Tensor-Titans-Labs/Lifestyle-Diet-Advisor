@@ -17,11 +17,11 @@ st.markdown("""
 <style>
     /* Clean white background */
     .stApp {
-        background-color: #f5f7fa;
+        background-color: #ffffff;
     }
     
     .main {
-        background-color: #f5f7fa;
+        background-color: #ffffff;
         max-width: 1200px;
         margin: 0 auto;
     }
@@ -30,14 +30,14 @@ st.markdown("""
     .main-header {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #000000;
+        color: #000000 !important;
         text-align: center;
         margin-bottom: 0.5rem;
     }
     
     .sub-header {
         text-align: center;
-        color: #000000;
+        color: #000000 !important;
         font-size: 1.1rem;
         margin-bottom: 2rem;
     }
@@ -46,7 +46,7 @@ st.markdown("""
     .section-header {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #000000;
+        color: #000000 !important;
         margin: 2rem 0 1rem 0;
         padding-bottom: 0.5rem;
         border-bottom: 2px solid #e2e8f0;
@@ -56,7 +56,22 @@ st.markdown("""
     .stSelectbox label, .stMultiSelect label, .stSlider label, .stRadio label, 
     .stNumberInput label, .stTextArea label {
         font-size: 0.95rem;
-        font-weight: 500;
+        font-weight: 600;
+        color: #000000 !important;
+    }
+    
+    /* All text elements */
+    p, span, div, label, h1, h2, h3, h4, h5, h6 {
+        color: #000000 !important;
+    }
+    
+    /* Streamlit specific text */
+    .stMarkdown, .stMarkdown p, .stMarkdown span, .stMarkdown div {
+        color: #000000 !important;
+    }
+    
+    /* Metric labels and values */
+    [data-testid="stMetricLabel"], [data-testid="stMetricValue"] {
         color: #000000 !important;
     }
     
@@ -67,6 +82,7 @@ st.markdown("""
         border-radius: 8px;
         border: 1px solid #cbd5e0;
         background: white;
+        color: #000000 !important;
     }
     
     div[data-baseweb="select"] > div:hover,
@@ -80,7 +96,7 @@ st.markdown("""
     .stButton>button {
         width: 100%;
         background-color: #4299e1;
-        color: white;
+        color: white !important;
         font-weight: 600;
         padding: 0.75rem 2rem;
         border-radius: 8px;
@@ -101,6 +117,10 @@ st.markdown("""
         text-align: center;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         border: 1px solid #e2e8f0;
+    }
+    
+    .score-card h3, .score-card h2 {
+        color: #000000 !important;
     }
     
     .health-score {
@@ -127,8 +147,12 @@ st.markdown("""
         margin: 1rem 0;
         border: 1px solid #e2e8f0;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        color: #000000;
+        color: #000000 !important;
         line-height: 1.8;
+    }
+    
+    .recommendation-box * {
+        color: #000000 !important;
     }
     
     /* Tabs */
@@ -141,7 +165,7 @@ st.markdown("""
         padding: 0.75rem 1.5rem;
         background: white;
         border: 1px solid #e2e8f0;
-        color: #000000;
+        color: #000000 !important;
     }
     
     .stTabs [data-baseweb="tab"]:hover {
@@ -150,7 +174,7 @@ st.markdown("""
     
     .stTabs [data-baseweb="tab"][aria-selected="true"] {
         background: #4299e1;
-        color: white;
+        color: white !important;
         border-color: #4299e1;
     }
     
@@ -172,6 +196,10 @@ st.markdown("""
         border: 1px solid #e2e8f0;
     }
     
+    .stAlert * {
+        color: #000000 !important;
+    }
+    
     /* Slider */
     .stSlider > div > div > div > div {
         background: #4299e1 !important;
@@ -180,7 +208,7 @@ st.markdown("""
     /* Multiselect tags */
     .stMultiSelect [data-baseweb="tag"] {
         background-color: #4299e1;
-        color: white;
+        color: white !important;
     }
     
     /* Form container */
@@ -200,6 +228,15 @@ st.markdown("""
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         border: 1px solid #e2e8f0;
         margin: 2rem 0;
+    }
+    
+    .welcome-card * {
+        color: #000000 !important;
+    }
+    
+    /* Download button specific */
+    .stDownloadButton > button {
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -511,12 +548,12 @@ else:
     tab1, tab2, tab3, tab4 = st.tabs(["📊 Overview", "🥗 Nutrition", "💪 Fitness", "🧠 Wellness"])
     
     with tab1:
-        st.markdown("### Your Personalized Recommendations")
-        st.markdown(f'<div class="recommendation-box" style="color: #000000;">{st.session_state.recommendations}</div>', 
+        st.markdown('<h3 style="color: #000000;">Your Personalized Recommendations</h3>', unsafe_allow_html=True)
+        st.markdown(f'<div class="recommendation-box" style="color: #000000 !important;">{st.session_state.recommendations}</div>', 
                    unsafe_allow_html=True)
     
     with tab2:
-        st.markdown("### Nutrition Guidelines")
+        st.markdown('<h3 style="color: #000000;">Nutrition Guidelines</h3>', unsafe_allow_html=True)
         
         col1, col2 = st.columns(2)
         with col1:
@@ -533,7 +570,7 @@ else:
         st.info("💡 Balance your meals throughout the day and stay hydrated")
     
     with tab3:
-        st.markdown("### Activity Overview")
+        st.markdown('<h3 style="color: #000000;">Activity Overview</h3>', unsafe_allow_html=True)
         
         col1, col2 = st.columns(2)
         with col1:
@@ -549,7 +586,7 @@ else:
         st.success("🎯 Aim for 150 minutes of moderate activity per week")
     
     with tab4:
-        st.markdown("### Mental Wellness")
+        st.markdown('<h3 style="color: #000000;">Mental Wellness</h3>', unsafe_allow_html=True)
         
         col1, col2 = st.columns(2)
         with col1:
