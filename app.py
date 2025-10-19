@@ -95,18 +95,26 @@ st.markdown("""
     /* Simple button */
     .stButton>button {
         width: 100%;
-        background-color: #4299e1;
+        background-color: #4299e1 !important;
         color: white !important;
-        font-weight: 600;
-        padding: 0.75rem 2rem;
-        border-radius: 8px;
-        border: none;
-        font-size: 1rem;
-        margin-top: 2rem;
+        font-weight: 700 !important;
+        padding: 0.75rem 2rem !important;
+        border-radius: 8px !important;
+        border: none !important;
+        font-size: 1.1rem !important;
+        margin-top: 2rem !important;
     }
     
     .stButton>button:hover {
-        background-color: #3182ce;
+        background-color: #3182ce !important;
+    }
+    
+    /* Form submit button */
+    .stButton button[kind="primary"] {
+        background-color: #4299e1 !important;
+        color: white !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem !important;
     }
     
     /* Score card */
@@ -236,7 +244,23 @@ st.markdown("""
     
     /* Download button specific */
     .stDownloadButton > button {
+        background-color: #48bb78 !important;
         color: white !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem !important;
+        padding: 0.75rem 2rem !important;
+        border-radius: 8px !important;
+        width: 100% !important;
+    }
+    
+    .stDownloadButton > button:hover {
+        background-color: #38a169 !important;
+    }
+    
+    /* Ensure button text is always visible */
+    button p, button span, button div {
+        color: white !important;
+        font-weight: 700 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -363,7 +387,7 @@ if st.session_state.show_form:
                 placeholder="e.g., Weight loss, Muscle gain, Better energy..."
             )
         
-        submit_button = st.form_submit_button("Get My Recommendations")
+        submit_button = st.form_submit_button("✅ Get My Recommendations", use_container_width=True)
 
     if submit_button:
         with st.spinner("Analyzing your lifestyle..."):
@@ -652,10 +676,11 @@ Always consult healthcare professionals for medical advice.
             data=report_content,
             file_name=f"health_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
             mime="text/plain",
-            use_container_width=True
+            use_container_width=True,
+            type="primary"
         )
     with col2:
-        if st.button("🔄 New Assessment", use_container_width=True):
+        if st.button("🔄 New Assessment", use_container_width=True, type="primary"):
             st.session_state.show_form = True
             st.session_state.recommendations = None
             st.session_state.lifestyle_score = None
