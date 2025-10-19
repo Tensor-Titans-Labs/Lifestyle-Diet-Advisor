@@ -224,6 +224,7 @@ if 'user_data' not in st.session_state:
 # Header
 st.markdown('<h1 class="main-header">🌱 Lifestyle & Diet Advisor</h1>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Get personalized health recommendations powered by AI</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: center; color: #718096; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">Built by MD Zaheer JK</p>', unsafe_allow_html=True)
 
 # Show form or recommendations based on state
 if st.session_state.show_form:
@@ -492,7 +493,7 @@ else:
         
         st.warning("🌙 Aim for 7-9 hours of quality sleep each night")
     
-    # Download Report Button
+    # Download Report and New Assessment Buttons
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Create downloadable report
@@ -529,7 +530,7 @@ Disclaimer: This report provides general wellness guidance.
 Always consult healthcare professionals for medical advice.
 """
     
-    col1, col2 = st.columns([1, 1])
+    col1, col2 = st.columns(2)
     with col1:
         st.download_button(
             label="📥 Download Report (TXT)",
