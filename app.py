@@ -30,14 +30,14 @@ st.markdown("""
     .main-header {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #1a202c;
+        color: #000000;
         text-align: center;
         margin-bottom: 0.5rem;
     }
     
     .sub-header {
         text-align: center;
-        color: #718096;
+        color: #000000;
         font-size: 1.1rem;
         margin-bottom: 2rem;
     }
@@ -46,7 +46,7 @@ st.markdown("""
     .section-header {
         font-size: 1.3rem;
         font-weight: 600;
-        color: #2d3748;
+        color: #000000;
         margin: 2rem 0 1rem 0;
         padding-bottom: 0.5rem;
         border-bottom: 2px solid #e2e8f0;
@@ -57,7 +57,7 @@ st.markdown("""
     .stNumberInput label, .stTextArea label {
         font-size: 0.95rem;
         font-weight: 500;
-        color: #2d3748 !important;
+        color: #000000 !important;
     }
     
     div[data-baseweb="select"] > div,
@@ -127,7 +127,7 @@ st.markdown("""
         margin: 1rem 0;
         border: 1px solid #e2e8f0;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        color: #2d3748;
+        color: #000000;
         line-height: 1.8;
     }
     
@@ -141,7 +141,7 @@ st.markdown("""
         padding: 0.75rem 1.5rem;
         background: white;
         border: 1px solid #e2e8f0;
-        color: #2d3748;
+        color: #000000;
     }
     
     .stTabs [data-baseweb="tab"]:hover {
@@ -226,7 +226,7 @@ if 'score_breakdown' not in st.session_state:
 # Header
 st.markdown('<h1 class="main-header">🌱 Lifestyle & Diet Advisor</h1>', unsafe_allow_html=True)
 st.markdown('<p class="sub-header">Get personalized health recommendations powered by AI</p>', unsafe_allow_html=True)
-st.markdown('<p style="text-align: center; color: #718096; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">Built by MD Zaheer JK</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: center; color: #000000; font-size: 0.9rem; margin-top: -1rem; margin-bottom: 2rem;">Built by MD Zaheer JK</p>', unsafe_allow_html=True)
 
 # Show form or recommendations based on state
 if st.session_state.show_form:
@@ -497,9 +497,9 @@ else:
         
         st.markdown(f"""
         <div class="score-card">
-            <h3 style="margin: 0; color: #718096;">Your Lifestyle Score</h3>
+            <h3 style="margin: 0; color: #000000;">Your Lifestyle Score</h3>
             <div class="health-score" style="color: {color};">{score}</div>
-            <h2 style="margin: 0; color: #2d3748;">{emoji} {level}</h2>
+            <h2 style="margin: 0; color: #000000;">{emoji} {level}</h2>
         </div>
         """, unsafe_allow_html=True)
         
@@ -512,8 +512,7 @@ else:
     
     with tab1:
         st.markdown("### Your Personalized Recommendations")
-        recommendations_html = st.session_state.recommendations.replace('\n', '<br>')
-        st.markdown(f'<div class="recommendation-box">{recommendations_html}</div>', 
+        st.markdown(f'<div class="recommendation-box" style="color: #000000;">{st.session_state.recommendations}</div>', 
                    unsafe_allow_html=True)
     
     with tab2:
@@ -632,14 +631,14 @@ if st.session_state.show_form and st.session_state.recommendations is None:
     st.markdown("---")
     st.markdown("""
     <div class="welcome-card">
-        <h3>👋 Welcome!</h3>
-        <p style="color: #718096; margin: 1rem 0;">
+        <h3 style="color: #000000;">👋 Welcome!</h3>
+        <p style="color: #000000; margin: 1rem 0;">
             Fill out the form above to receive personalized health and lifestyle recommendations powered by AI.
         </p>
-        <p style="color: #718096;">
+        <p style="color: #000000;">
             Our system analyzes your lifestyle habits and provides tailored advice for:
         </p>
-        <ul style="color: #718096; text-align: left; margin: 1rem 0;">
+        <ul style="color: #000000; text-align: left; margin: 1rem 0;">
             <li>Diet and nutrition planning</li>
             <li>Exercise recommendations</li>
             <li>Sleep optimization tips</li>
@@ -651,7 +650,7 @@ if st.session_state.show_form and st.session_state.recommendations is None:
 # Footer
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; color: #718096; padding: 1rem 0;'>
+<div style='text-align: center; color: #000000; padding: 1rem 0;'>
     <p><strong>Lifestyle & Diet Advisor</strong> | Powered by Google Gemini AI</p>
     <p style='font-size: 0.9rem;'>⚠️ This tool provides general wellness guidance. Consult healthcare professionals for medical advice.</p>
 </div>
