@@ -98,7 +98,7 @@ View your personalized results including:
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/lifestyle-diet-advisor.git
+git clone https://github.com/Tensor-Titans-Labs/lifestyle-diet-advisor.git
 cd lifestyle-diet-advisor
 ```
 
