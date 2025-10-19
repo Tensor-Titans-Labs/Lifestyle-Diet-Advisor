@@ -95,7 +95,7 @@ st.markdown("""
     /* Simple button */
     .stButton>button {
         width: 100%;
-        background-color: #4299e1 !important;
+        background-color: #48bb78 !important;
         color: white !important;
         font-weight: 700 !important;
         padding: 0.75rem 2rem !important;
@@ -106,15 +106,19 @@ st.markdown("""
     }
     
     .stButton>button:hover {
-        background-color: #3182ce !important;
+        background-color: #38a169 !important;
     }
     
     /* Form submit button */
     .stButton button[kind="primary"] {
-        background-color: #4299e1 !important;
+        background-color: #48bb78 !important;
         color: white !important;
         font-weight: 700 !important;
         font-size: 1.1rem !important;
+    }
+    
+    .stButton button[kind="primary"]:hover {
+        background-color: #38a169 !important;
     }
     
     /* Score card */
