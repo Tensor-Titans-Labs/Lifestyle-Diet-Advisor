@@ -220,6 +220,8 @@ if 'show_form' not in st.session_state:
     st.session_state.show_form = True
 if 'user_data' not in st.session_state:
     st.session_state.user_data = {}
+if 'score_breakdown' not in st.session_state:
+    st.session_state.score_breakdown = {}
 
 # Header
 st.markdown('<h1 class="main-header">🌱 Lifestyle & Diet Advisor</h1>', unsafe_allow_html=True)
@@ -345,36 +347,107 @@ if st.session_state.show_form:
                 - Alcohol: {alcohol}
                 - Health Goals: {health_goals if health_goals else 'General wellness'}
 
-                Please provide:
-                1. Detailed recommendations in these categories:
-                   - Diet & Nutrition (specific meal suggestions, timing, portions)
-                   - Hydration (optimal intake, timing)
-                   - Sleep Optimization (sleep hygiene tips)
-                   - Exercise Plan (specific activities, duration, frequency)
-                   - Stress Management (practical techniques)
-                   - Habit Modifications (lifestyle changes)
-                2. A personalized action plan with 3-5 immediate steps
-                3. Potential health risks to watch for based on current lifestyle
+                Please provide a comprehensive analysis with:
 
-                Format the response with clear headings and bullet points for easy reading.
+                1. LIFESTYLE HEALTH SCORE ANALYSIS:
+                   - Provide an estimated score out of 100
+                   - Break down the score by category (positive and negative aspects)
+                   - Explain what impacts the score
+
+                2. DETAILED RECOMMENDATIONS by category:
+                   
+                   **Diet & Nutrition:**
+                   - Specific meal suggestions with timing and portions
+                   - Foods to include and avoid
+                   - Nutrient focus areas
+                   
+                   **Hydration:**
+                   - Optimal water intake recommendations
+                   - Best timing for hydration
+                   
+                   **Sleep Optimization:**
+                   - Sleep hygiene tips
+                   - Bedtime routine suggestions
+                   - Environmental factors to improve sleep quality
+                   
+                   **Exercise Plan:**
+                   - Specific activities suited to their lifestyle
+                   - Duration and frequency recommendations
+                   - Progressive plan to increase activity
+                   
+                   **Stress Management:**
+                   - Practical stress-reduction techniques
+                   - Mindfulness and relaxation practices
+                   
+                   **Habit Modifications:**
+                   - Specific lifestyle changes needed
+                   - Sustainable behavior modifications
+
+                3. PERSONALIZED ACTION PLAN:
+                   - 3-5 immediate steps to take this week
+                   - Prioritized by impact and ease of implementation
+
+                4. HEALTH RISKS & CONCERNS:
+                   - Potential health risks based on current lifestyle
+                   - Warning signs to watch for
+                   - When to consult healthcare professionals
+
+                Format the response with clear headings using **bold** for sections and bullet points for easy reading.
+                Make it detailed, actionable, and personalized to their specific situation.
                 """
                 
                 response = model.generate_content(prompt)
                 recommendations_text = response.text
                 
-                # Calculate lifestyle score
+                # Calculate lifestyle score with detailed breakdown
                 score = 0
-                score += min(water_intake * 5, 40)
-                score += min(sleep_hours * 5, 35)
-                if sleep_quality in ["Good", "Excellent"]: score += 10
-                if exercise_frequency in ["3-4 times/week", "5-6 times/week", "Daily"]: score += 15
-                if stress_level in ["Very Low", "Low"]: score += 10
-                if smoking == "Non-smoker": score += 10
-                if alcohol in ["None", "Occasional (1-2/week)"]: score += 5
+                score_breakdown = {}
+                
+                # Water intake (max 40 points)
+                water_score = min(water_intake * 5, 40)
+                score += water_score
+                score_breakdown['Water Intake'] = water_score
+                
+                # Sleep duration (max 35 points)
+                sleep_duration_score = min(sleep_hours * 5, 35)
+                score += sleep_duration_score
+                score_breakdown['Sleep Duration'] = sleep_duration_score
+                
+                # Sleep quality (10 points)
+                sleep_quality_score = 10 if sleep_quality in ["Good", "Excellent"] else 0
+                score += sleep_quality_score
+                score_breakdown['Sleep Quality'] = sleep_quality_score
+                
+                # Exercise frequency (15 points)
+                exercise_score = 15 if exercise_frequency in ["3-4 times/week", "5-6 times/week", "Daily"] else 0
+                score += exercise_score
+                score_breakdown['Exercise'] = exercise_score
+                
+                # Stress management (10 points)
+                stress_score = 10 if stress_level in ["Very Low", "Low"] else 0
+                score += stress_score
+                score_breakdown['Stress Management'] = stress_score
+                
+                # Smoking status (10 points)
+                smoking_score = 10 if smoking == "Non-smoker" else 0
+                score += smoking_score
+                score_breakdown['Non-smoking'] = smoking_score
+                
+                # Alcohol consumption (5 points)
+                alcohol_score = 5 if alcohol in ["None", "Occasional (1-2/week)"] else 0
+                score += alcohol_score
+                score_breakdown['Alcohol Moderation'] = alcohol_score
+                
+                # Meditation bonus (5 points)
+                meditation_score = 5 if meditation == "Yes, regularly" else 0
+                score += meditation_score
+                score_breakdown['Meditation'] = meditation_score
+                
                 score = min(score, 100)
                 
                 st.session_state.recommendations = recommendations_text
                 st.session_state.lifestyle_score = score
+                st.session_state.score_breakdown = score_breakdown
                 st.session_state.user_data = {
                     'age': age,
                     'diet_type': diet_type,
@@ -496,7 +569,10 @@ else:
     # Download Report and New Assessment Buttons
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Create downloadable report
+    # Create downloadable report with score breakdown
+    score_breakdown = st.session_state.get('score_breakdown', {})
+    breakdown_text = "\n".join([f"{category}: {score} points" for category, score in score_breakdown.items()])
+    
     report_content = f"""
 LIFESTYLE & DIET ADVISOR - HEALTH REPORT
 {'='*50}
@@ -504,6 +580,9 @@ LIFESTYLE & DIET ADVISOR - HEALTH REPORT
 Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 LIFESTYLE SCORE: {st.session_state.lifestyle_score}/100
+
+SCORE BREAKDOWN:
+{breakdown_text}
 
 USER PROFILE:
 {'='*50}
@@ -533,18 +612,19 @@ Always consult healthcare professionals for medical advice.
     col1, col2 = st.columns(2)
     with col1:
         st.download_button(
-            label="📥 Download Report (TXT)",
+            label="📥 Download Report",
             data=report_content,
             file_name=f"health_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
             mime="text/plain",
             use_container_width=True
         )
     with col2:
-        if st.button("🔄 Start New Assessment", use_container_width=True):
+        if st.button("🔄 New Assessment", use_container_width=True):
             st.session_state.show_form = True
             st.session_state.recommendations = None
             st.session_state.lifestyle_score = None
             st.session_state.user_data = {}
+            st.session_state.score_breakdown = {}
             st.rerun()
 
 # Welcome screen
