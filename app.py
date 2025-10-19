@@ -94,7 +94,7 @@ st.markdown("""
     
     /* Simple button */
     .stButton>button {
-        width: 100%;
+        width: 100% !important;
         background-color: #48bb78 !important;
         color: white !important;
         font-weight: 700 !important;
@@ -109,16 +109,45 @@ st.markdown("""
         background-color: #38a169 !important;
     }
     
+    .stButton>button:active {
+        background-color: #2f855a !important;
+    }
+    
     /* Form submit button */
-    .stButton button[kind="primary"] {
+    .stFormSubmitButton>button {
+        width: 100% !important;
         background-color: #48bb78 !important;
         color: white !important;
         font-weight: 700 !important;
         font-size: 1.1rem !important;
+        padding: 0.75rem 2rem !important;
+        border-radius: 8px !important;
+        border: none !important;
     }
     
-    .stButton button[kind="primary"]:hover {
+    .stFormSubmitButton>button:hover {
         background-color: #38a169 !important;
+    }
+    
+    .stFormSubmitButton>button:active {
+        background-color: #2f855a !important;
+    }
+    
+    /* All button types */
+    button[kind="primary"], button[kind="secondary"] {
+        background-color: #48bb78 !important;
+        color: white !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem !important;
+        border: none !important;
+    }
+    
+    button[kind="primary"]:hover, button[kind="secondary"]:hover {
+        background-color: #38a169 !important;
+    }
+    
+    button[kind="primary"]:active, button[kind="secondary"]:active {
+        background-color: #2f855a !important;
     }
     
     /* Score card */
@@ -255,16 +284,36 @@ st.markdown("""
         padding: 0.75rem 2rem !important;
         border-radius: 8px !important;
         width: 100% !important;
+        border: none !important;
     }
     
     .stDownloadButton > button:hover {
         background-color: #38a169 !important;
     }
     
+    .stDownloadButton > button:active {
+        background-color: #2f855a !important;
+    }
+    
     /* Ensure button text is always visible */
-    button p, button span, button div {
+    button p, button span, button div, button * {
         color: white !important;
         font-weight: 700 !important;
+        background: transparent !important;
+    }
+    
+    /* Force all buttons to be green */
+    button {
+        background-color: #48bb78 !important;
+        color: white !important;
+    }
+    
+    button:hover {
+        background-color: #38a169 !important;
+    }
+    
+    button:active {
+        background-color: #2f855a !important;
     }
 </style>
 """, unsafe_allow_html=True)
