@@ -722,7 +722,8 @@ Disclaimer: This report provides general wellness guidance.
 Always consult healthcare professionals for medical advice.
 """
     
-    col1, col2 = st.columns(2)
+    # Buttons in same row
+    col1, col2 = st.columns([1, 1])
     with col1:
         st.download_button(
             label="📥 Download Report",
